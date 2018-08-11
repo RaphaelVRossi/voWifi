@@ -1,18 +1,15 @@
-<!--
-  Generated template for the SimInsertPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>simInsertPage</ion-title>
+  <ion-navbar [hideBackButton]="true">
+    <ion-title>
+      <img src="../../assets/imgs/tim-logo.png"/>
+    </ion-title>
   </ion-navbar>
-
 </ion-header>
 
 
 <ion-content padding>
-
+  <ion-item>
+    <ion-label>Enter your number</ion-label>
+    <ion-input type="tel" pattern="\+?55\s?\([0-9]{2}\)\s[0-9]{4,5}-[0-9]{4}" maxlength="19" minlength="19" placeholder="+55 (xx) xxxxx - xxxx" #input mask="+55 (**) *****-****"></ion-input>
+  </ion-item>
 </ion-content>

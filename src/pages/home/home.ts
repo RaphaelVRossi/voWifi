@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, AlertController } from 'ionic-angular';
 import { Sim } from "@ionic-native/sim";
+import {SimInsertPage} from "../sim-insert/sim-insert";
 
 @Component({
   selector: 'page-home',
@@ -18,27 +19,9 @@ export class HomePage {
     );*/
   }
 
-  async join() {
-    /*
-        let simInfo = await this.sim.getSimInfo();
-
-        let hasPermission = await this.sim.hasReadPermission();
-
-        let prompt = this.alert.create({
-          title: simInfo.countryCode,
-          subTitle: 'qtd:' + simInfo.cards.size +
-            ' Permission: ' + hasPermission +
-            ' Index0: ' + simInfo.cards[0].simSlotIndex +
-            ' DisplayName0: '+ simInfo.cards[0].displayName +
-            ' PhoneNumber0: ' + simInfo.cards[0].phoneNumber +
-            ' PhoneNumberSim: ' + simInfo.phoneNumber +
-            ' SimSerialNumber0: ' + simInfo.simSerialNumber +
-            ' CarrierName0: '+ simInfo.cards[0].carrierName
-          ,
-          buttons: ['OK']
-        });
-
-        prompt.present();*/
+  async moveToSimPage() {
+    console.log('TESTE');
+    this.navCtrl.push(SimInsertPage)
   }
 
   async getSimData() {
