@@ -1,14 +1,34 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      <img src="../../assets/imgs/tim-logo.png"/>
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+  <h1>Welcome to TIM VoWifi</h1>
+  <button (click)="join()">Join</button>
+  <button ion-button (click)="getSimData()">Populate SIM Info</button>
+
+  <ion-list *ngIf="simInfo">
+    <ion-item><b>countryCode</b> {{ simInfo.countryCode }}</ion-item>
+  </ion-list>
+  <ion-card *ngFor="let card of cards">
+    <ion-card-header>
+      {{card.carrierName}}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item><b>simSlotIndex</b> {{ card.simSlotIndex }}</ion-item>
+        <ion-item><b>displayName</b> {{ card.displayName }}</ion-item>
+        <ion-item><b>isNetworkRoaming</b> {{ card.isNetworkRoaming }}</ion-item>
+        <ion-item><b>isDataRoaming</b> {{ card.isDataRoaming }}</ion-item>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
+
+<ion-footer>
+  Powered by Nokia/Eng.IT
+</ion-footer>
