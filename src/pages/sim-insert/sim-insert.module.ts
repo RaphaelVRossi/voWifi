@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
-import { IonicPageModule } from 'ionic-angular';
-import { SimInsertPage } from './sim-insert';
+import {NgModule} from '@angular/core';
+import {IonicPageModule} from 'ionic-angular';
+import {SimInsertPage} from './sim-insert';
 
 @NgModule({
   declarations: [
@@ -10,4 +10,5 @@ import { SimInsertPage } from './sim-insert';
     IonicPageModule.forChild(SimInsertPage),
   ],
 })
-export class SimInsertPageModule {}
+export class SimInsertPageModule {
+}

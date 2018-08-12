@@ -1,5 +1,5 @@
-import { Directive, Attribute, Optional } from '@angular/core';
-import { NgModel } from '@angular/forms'
+import {Attribute, Directive, Optional} from '@angular/core';
+import {NgModel} from '@angular/forms'
 
 @Directive({
   selector: '[mask]',
@@ -9,7 +9,7 @@ import { NgModel } from '@angular/forms'
   },
   providers: [NgModel],
 })
-export class Mask  {
+export class Mask {
 
   pattern: string;
 
@@ -73,7 +73,7 @@ export class Mask  {
 
       console.log(this.model, applied)
 
-      if(this.model && this.model.valueAccessor)
+      if (this.model && this.model.valueAccessor)
         this.model.valueAccessor.writeValue(applied);
 
       if (caret < value.length) {

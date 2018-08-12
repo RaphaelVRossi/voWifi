@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
-import { Sim } from "@ionic-native/sim";
+import {Component} from '@angular/core';
+import {AlertController, NavController} from 'ionic-angular';
+import {Sim} from "@ionic-native/sim";
 import {SimInsertPage} from "../sim-insert/sim-insert";
 
 @Component({
