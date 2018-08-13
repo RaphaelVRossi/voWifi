@@ -11,7 +11,7 @@ export class HomePage {
   public simInfo: any;
   public cards: any;
 
-  constructor(public navCtrl: NavController, private sim: Sim, private alert: AlertController) {
+  constructor(public navCtrl: NavController, private sim: Sim) {
 
     /*this.sim.requestReadPermission().then(
       () => console.log('Permission granted'),

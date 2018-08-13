@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar>
-    <ion-title style="color: #488aff">
-      <img src="../../assets/imgs/tim-logo.png"/>
+    <ion-title>
+      <img class="image-center" src="../../assets/imgs/tim-logo.png"/>
     </ion-title>
   </ion-navbar>
 </ion-header>
@@ -9,9 +9,9 @@
 <ion-content padding>
   <h1>Welcome to TIM VoWifi</h1>
 
-  <button ion-button (click)="moveToSimPage()">Join</button>
+  <button ion-button class="tim-button" (click)="moveToSimPage()">Join</button>
 
-  <button ion-button (click)="getSimData()">Populate SIM Info</button>
+  <button ion-button class="tim-button" (click)="getSimData()">Populate SIM Info</button>
 
   <ion-list *ngIf="simInfo">
     <ion-item><b>Country Code</b> {{ simInfo.countryCode }}</ion-item>
@@ -36,5 +36,5 @@
 </ion-content>
 
 <ion-footer>
-  <label style="color: #488aff"> Powered by Nokia/Eng.IT </label>
+  <label class="footer-label"> Powered by Nokia/Eng.IT </label>
 </ion-footer>

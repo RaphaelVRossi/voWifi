@@ -13,3 +13,35 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+.toolbar-background-md {
+  background: #004b8e !important;
+}
+
+.image-center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.footer-label {
+  color: #004b8e;
+}
+
+.tim-button {
+  background: #004b8e;
+}
+
+.input-has-focus .label-md[floating] {
+  color: #004b8e !important;
+}
+
+.scroll-content {
+  height: 100%;
+  text-align: center;
+  position: relative !important;
+}
+
+.bar-button-default-md {
+  color: #FFFFFF;
+}

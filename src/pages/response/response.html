@@ -1,15 +1,16 @@
 <ion-header>
-  <ion-navbar [hideBackButton]="true">
-    <ion-title style="color: #488aff">
-      <img src="../../assets/imgs/tim-logo.png"/>
+  <ion-navbar>
+    <ion-title>
+      <img class="image-center" src="../../assets/imgs/tim-logo.png"/>
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h1> {{response}} </h1>
+  <h1 *ngIf="!error"> {{response}} </h1>
+  <h1 *ngIf="error" style="color: #ff0001;"> {{response}} </h1>
 </ion-content>
 
 <ion-footer>
-  <label style="color: #488aff"> Powered by Nokia/Eng.IT </label>
+  <label class="footer-label"> Powered by Nokia/Eng.IT </label>
 </ion-footer>

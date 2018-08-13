@@ -18,6 +18,7 @@ import {ResponsePage} from "../response/response";
 export class SimInsertPage {
   model: SimCard;
   showActivate: boolean;
+  validPrefixs = ['(21) 98113', '(11) 98523', '(11) 98113'];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private simProvider: SimProvider,
               private toast: ToastController) {
@@ -29,26 +30,46 @@ export class SimInsertPage {
   }
 
   async simValueChange(number: any) {
-    if (this.showActivate)
+    if (this.showActivate) {
       this.showActivate = null;
+      this.model = new SimCard();
+    }
     console.log(number.value);
 
     if (number.value && number.value.length == 15) {
-      await this.simProvider.getBySimNumber(number.value).then(
-        (result: SimCard) => {
-          console.log('Select');
-          if (result)
-            this.model = result;
+      let isValid: boolean;
+      for (let prefix in this.validPrefixs) {
+        isValid = number.value.startsWith(this.validPrefixs[prefix]);
+        if (isValid)
+          break;
+      }
 
-          this.showActivate = this.model && this.model.status_id === 1;
+      if (isValid) {
+        await this.simProvider.getBySimNumber(number.value).then(
+          (result: SimCard) => {
+            console.log('Select');
+            if (result)
+              this.model = result;
+            else {
+              this.model.sim_number = number.value;
+              this.model.status_id = 1;
+            }
 
-          this.toast.create({
-            message: 'ID ' + this.model.id + ' Sim number ' + this.model.sim_number + ' Status do sim ' + this.model.status_id,
-            duration: 3000,
-            position: 'botton'
-          }).present();
-        }
-      );
+            this.showActivate = this.model && this.model.status_id === 1;
+
+            this.toast.create({
+              message: 'ID ' + this.model.id + ' Sim number ' + this.model.sim_number + ' Status do sim ' + this.model.status_id,
+              duration: 3000,
+              position: 'botton'
+            }).present();
+          }
+        );
+      } else {
+        this.navCtrl.push(ResponsePage, {
+          'response': 'ERROR!\nAvailable only for TIM Brasil Employees',
+          'error': true
+        });
+      }
     }
   }
 
@@ -57,10 +78,10 @@ export class SimInsertPage {
 
     this.simProvider.save(this.model).then(
       () => {
-        this.showActivate = this.model && this.model.status_id === 1;
         this.navCtrl.push(ResponsePage, {
           'response': 'Numero ativado'
         });
+        this.showActivate = this.model && this.model.status_id === 1;
         this.toast.create({message: 'Ativado.', duration: 3000, position: 'botton'}).present();
       }
     ).catch(
@@ -75,10 +96,10 @@ export class SimInsertPage {
 
     this.simProvider.save(this.model).then(
       () => {
-        this.showActivate = this.model && this.model.status_id === 1;
         this.navCtrl.push(ResponsePage, {
           'response': 'Numero desativado'
         });
+        this.showActivate = this.model && this.model.status_id === 1;
         this.toast.create({message: 'Desativado.', duration: 3000, position: 'botton'}).present();
       }
     ).catch(

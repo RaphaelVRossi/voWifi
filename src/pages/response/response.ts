@@ -15,8 +15,10 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ResponsePage {
   response: string = '';
+  error: boolean = false;
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.response = this.navParams.get('response');
+    this.error = this.navParams.get('error');
   }
 
   ionViewDidLoad() {

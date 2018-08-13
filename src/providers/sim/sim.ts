@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {DatabaseProvider} from "../database/database";
 import {SQLiteObject} from "@ionic-native/sqlite";
+import {ToastController} from "ionic-angular";
 
 /*
   Generated class for the SimProvider provider.
@@ -11,25 +12,29 @@ import {SQLiteObject} from "@ionic-native/sqlite";
 @Injectable()
 export class SimProvider {
 
-  constructor(public dbProvider: DatabaseProvider) {
+  constructor(public dbProvider: DatabaseProvider, private toast: ToastController) {
     console.log('Hello SimProvider Provider');
   }
 
   public save(product: SimCard) {
-    if (product.id)
+    if (product.id) {
+      this.toast.create({message: 'Update.', duration: 3000, position: 'botton'}).present();
       return this.update(product);
-    else
+    } else {
+      this.toast.create({message: 'Save.', duration: 3000, position: 'botton'}).present();
       return this.insert(product);
+    }
+
   }
 
-  private insert(product: SimCard) {
+  private insert(simCard: SimCard) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
         let sql = 'insert into sim_card (sim_number, status_id) values (?, ?)';
-        let data = [product.sim_number, product.status_id];
+        let data = [simCard.sim_number, simCard.status_id];
 
-        return db.executeSql(sql, data)
-          .catch((e) => console.error(e));
+        return db.executeSql(sql, data).then(() => this.toast.create({message: 'insert sql.', duration: 3000, position: 'botton'}).present())
+          .catch((e) => this.toast.create({message: 'erro insert sql.', duration: 3000, position: 'botton'}).present());
       })
       .catch((e) => console.error(e));
   }
