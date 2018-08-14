@@ -18,6 +18,22 @@
   background: #004b8e !important;
 }
 
+ion-header button, .back-button {
+  position: absolute !important;
+  z-index: 5;
+}
+
+
+ion-title {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0 90px 1px;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
 .image-center {
   display: block;
   margin-left: auto;
@@ -29,7 +45,8 @@
 }
 
 .tim-button {
-  background: #004b8e;
+  border-color: #004b8e;
+  color: #004b8e;
 }
 
 .input-has-focus .label-md[floating] {

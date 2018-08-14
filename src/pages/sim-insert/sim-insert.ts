@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {IonicPage, NavController, NavParams, ToastController} from 'ionic-angular';
 import {SimCard, SimProvider} from "../../providers/sim/sim";
 import {ResponsePage} from "../response/response";
+import {Http} from "@angular/http";
 
 /**
  * Generated class for the SimInsertPage page.
@@ -21,7 +22,7 @@ export class SimInsertPage {
   validPrefixs = ['(21) 98113', '(11) 98523', '(11) 98113'];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private simProvider: SimProvider,
-              private toast: ToastController) {
+              private toast: ToastController, private http: Http) {
   }
 
   ionViewDidLoad() {
@@ -37,76 +38,108 @@ export class SimInsertPage {
     console.log(number.value);
 
     if (number.value && number.value.length == 15) {
-      let isValid: boolean;
-      for (let prefix in this.validPrefixs) {
-        isValid = number.value.startsWith(this.validPrefixs[prefix]);
-        if (isValid)
-          break;
-      }
-
-      if (isValid) {
-        await this.simProvider.getBySimNumber(number.value).then(
-          (result: SimCard) => {
-            console.log('Select');
-            if (result)
-              this.model = result;
-            else {
-              this.model.sim_number = number.value;
-              this.model.status_id = 1;
-            }
-
-            this.showActivate = this.model && this.model.status_id === 1;
-
-            this.toast.create({
-              message: 'ID ' + this.model.id + ' Sim number ' + this.model.sim_number + ' Status do sim ' + this.model.status_id,
-              duration: 3000,
-              position: 'botton'
-            }).present();
+      await this.simProvider.getBySimNumber(number.value).then(
+        (result: SimCard) => {
+          console.log('Select');
+          if (result)
+            this.model = result;
+          else {
+            this.model.sim_number = number.value;
+            this.model.status_id = 1;
           }
-        );
-      } else {
-        this.navCtrl.push(ResponsePage, {
-          'response': 'ERROR!\nAvailable only for TIM Brasil Employees',
-          'error': true
-        });
-      }
+
+          this.showActivate = this.model && this.model.status_id === 1;
+
+          this.toast.create({
+            message: 'ID ' + this.model.id + ' Sim number ' + this.model.sim_number + ' Status do sim ' + this.model.status_id,
+            duration: 3000,
+            position: 'botton'
+          }).present();
+        }
+      );
     }
   }
 
   async activateSim() {
-    this.model.status_id = 2;
+    let isValid: boolean;
+    for (let prefix in this.validPrefixs) {
+      isValid = this.model.sim_number.startsWith(this.validPrefixs[prefix]);
+      if (isValid)
+        break;
+    }
 
-    this.simProvider.save(this.model).then(
-      () => {
-        this.navCtrl.push(ResponsePage, {
-          'response': 'Numero ativado'
-        });
-        this.showActivate = this.model && this.model.status_id === 1;
-        this.toast.create({message: 'Ativado.', duration: 3000, position: 'botton'}).present();
-      }
-    ).catch(
-      () => {
-        this.toast.create({message: 'Erro ao ativar.', duration: 3000, position: 'botton'}).present();
-      }
-    );
+    if (isValid) {
+      let data = {
+        serviceSpecification: {
+          id: "vowifi"
+        },
+        serviceCharacteristic: [
+          {
+            name: "msisdn", value: SimInsertPage.clearSimNumber(this.model.sim_number)
+          }
+        ]
+      };
+
+      await this.http.post('http://rrossi.ddns.net:5000/api/v1/service', data).toPromise().then(
+        (response) => {
+          this.model.status_id = 2;
+
+          this.simProvider.save(this.model).then(
+            () => {
+              this.navCtrl.push(ResponsePage, {
+                'response': 'Parabéns: Seu serviço VoWIFI está ativo e pronto para uso'
+              });
+              this.showActivate = this.model && this.model.status_id === 1;
+              this.toast.create({message: 'Ativado.', duration: 3000, position: 'botton'}).present();
+            }
+          ).catch(
+            () => {
+              this.toast.create({message: 'Erro ao ativar.', duration: 3000, position: 'botton'}).present();
+            }
+          );
+        }
+      ).catch(
+        (response) => this.navCtrl.push(ResponsePage, {
+          'response': 'Erro ao acessar os dados',
+          'error': true
+        })
+      );
+    } else {
+      this.navCtrl.push(ResponsePage, {
+        'response': 'Serviço disponível somente para colaboradores da TIM',
+        'error': true
+      });
+    }
   }
 
   async deactivateSim() {
-    this.model.status_id = 1;
+    await this.http.delete('http://rrossi.ddns.net:5000/api/v1/service/vowifi-', {params: {'MSISDN': SimInsertPage.clearSimNumber(this.model.sim_number)}}).toPromise().then(
+      (response) => {
+        this.model.status_id = 1;
 
-    this.simProvider.save(this.model).then(
-      () => {
-        this.navCtrl.push(ResponsePage, {
-          'response': 'Numero desativado'
-        });
-        this.showActivate = this.model && this.model.status_id === 1;
-        this.toast.create({message: 'Desativado.', duration: 3000, position: 'botton'}).present();
+        this.simProvider.save(this.model).then(
+          () => {
+            this.navCtrl.push(ResponsePage, {
+              'response': 'Seu serviço VoWIFI foi desativado'
+            });
+            this.showActivate = this.model && this.model.status_id === 1;
+            this.toast.create({message: 'Desativado.', duration: 3000, position: 'botton'}).present();
+          }
+        ).catch(
+          () => {
+            this.toast.create({message: 'Erro ao desativado.', duration: 3000, position: 'botton'}).present();
+          }
+        );
       }
     ).catch(
-      () => {
-        this.toast.create({message: 'Erro ao desativado.', duration: 3000, position: 'botton'}).present();
-      }
+      (response) => this.navCtrl.push(ResponsePage, {
+        'response': 'Erro ao acessar os dados',
+        'error': true
+      })
     );
   }
 
+  static clearSimNumber(sim_number: string) {
+    return sim_number.replace('(', '').replace(')', '').replace(' ', '').replace('-', '');
+  }
 }

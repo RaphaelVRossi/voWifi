@@ -1,21 +1,23 @@
 <ion-header>
   <ion-navbar>
-    <ion-title >
-      <img class="image-center" src="../../assets/imgs/tim-logo.png"/>
+    <ion-title>
+      <img src="../../assets/imgs/tim-logo.png"/>
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <ion-item>
-    <ion-label floating>Enter your number</ion-label>
+    <ion-label floating>Entre com seu número</ion-label>
     <ion-input type="tel" pattern="\(\d\d\)\s\d{4,5}\-\d{4}" maxlength="15"
                minlength="15" #input mask="(**) *****-****"
                (ionChange)="simValueChange($event)"></ion-input>
   </ion-item>
 
-  <button ion-button color="secondary"  *ngIf="showActivate != null && showActivate" (click)="activateSim()">Activate</button>
-  <button ion-button color="danger" *ngIf="showActivate != null && !showActivate" (click)="deactivateSim()">Deactivate</button>
+  <button ion-button round color="secondary" *ngIf="showActivate != null && showActivate" (click)="activateSim()">Ativar
+  </button>
+  <button ion-button round color="danger" *ngIf="showActivate != null && !showActivate" (click)="deactivateSim()">Desativar
+  </button>
 
 </ion-content>
 

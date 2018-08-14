@@ -12,8 +12,8 @@ import {Mask} from './utils/mask';
 import {SQLite} from "@ionic-native/sqlite";
 import {DatabaseProvider} from '../providers/database/database';
 import {SimProvider} from '../providers/sim/sim';
-import {HttpClientModule} from "@angular/common/http";
 import {ResponsePage} from "../pages/response/response";
+import {HttpModule} from "@angular/http";
 
 @NgModule({
   declarations: [
@@ -25,6 +25,7 @@ import {ResponsePage} from "../pages/response/response";
   ],
   imports: [
     BrowserModule,
+    HttpModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -43,7 +44,7 @@ import {ResponsePage} from "../pages/response/response";
     SQLite,
     DatabaseProvider,
     SimProvider,
-    HttpClientModule,
+    HttpModule,
   ]
 })
 export class AppModule {
