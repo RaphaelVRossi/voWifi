@@ -80,8 +80,9 @@ export class SimInsertPage {
         ]
       };
 
-      await this.http.post('http://rrossi.ddns.net:5000/api/v1/service', data).toPromise().then(
+      await this.http.post('http://135.109.210.53:5000/api/v1/activation/service', data).toPromise().then(
         (response) => {
+          console.log(response);
           this.model.status_id = 2;
 
           this.simProvider.save(this.model).then(
@@ -113,7 +114,8 @@ export class SimInsertPage {
   }
 
   async deactivateSim() {
-    await this.http.delete('http://rrossi.ddns.net:5000/api/v1/service/vowifi-', {params: {'MSISDN': SimInsertPage.clearSimNumber(this.model.sim_number)}}).toPromise().then(
+    // await this.http.delete('http://135.109.210.53:5000/api/v1/activation/service/vowifi-', {params: {'MSISDN': SimInsertPage.clearSimNumber(this.model.sim_number)}}).toPromise().then(
+    await this.http.delete('http://135.109.210.53:5000/api/v1/activation/service/vowifi-' + SimInsertPage.clearSimNumber(this.model.sim_number)).toPromise().then(
       (response) => {
         this.model.status_id = 1;
 

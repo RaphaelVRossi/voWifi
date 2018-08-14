@@ -6,9 +6,15 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h1 *ngIf="!error"> {{response}} </h1>
-  <h1 *ngIf="error" style="color: #ff0001;"> {{response}} </h1>
+<ion-content padding class="colorfull-background">
+  <ion-card>
+    <ion-card-content>
+      <ion-list no-lines>
+        <h1 *ngIf="!error"> {{response}} </h1>
+        <h1 *ngIf="error" style="color: #ff0001;"> {{response}} </h1>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
 
 <ion-footer>

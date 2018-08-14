@@ -6,19 +6,25 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <ion-item>
-    <ion-label floating>Entre com seu número</ion-label>
-    <ion-input type="tel" pattern="\(\d\d\)\s\d{4,5}\-\d{4}" maxlength="15"
-               minlength="15" #input mask="(**) *****-****"
-               (ionChange)="simValueChange($event)"></ion-input>
-  </ion-item>
+<ion-content padding class="colorfull-background">
 
-  <button ion-button round color="secondary" *ngIf="showActivate != null && showActivate" (click)="activateSim()">Ativar
-  </button>
-  <button ion-button round color="danger" *ngIf="showActivate != null && !showActivate" (click)="deactivateSim()">Desativar
-  </button>
+  <ion-card>
+    <ion-card-content>
+      <ion-list no-lines>
+        <ion-item>
+          <ion-label floating>Entre com seu número</ion-label>
+          <ion-input type="tel" pattern="\(\d\d\)\s\d{4,5}\-\d{4}" maxlength="15"
+                     minlength="15" #input mask="(**) *****-****"
+                     (ionChange)="simValueChange($event)"></ion-input>
+        </ion-item>
 
+        <button ion-button round color="secondary" *ngIf="showActivate != null && showActivate" (click)="activateSim()">Ativar
+        </button>
+        <button ion-button round color="danger" *ngIf="showActivate != null && !showActivate" (click)="deactivateSim()">Desativar
+        </button>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
 
 <ion-footer>
