@@ -50,11 +50,11 @@ export class SimInsertPage {
 
           this.showActivate = this.model && this.model.status_id === 1;
 
-          this.toast.create({
+          /*this.toast.create({
             message: 'ID ' + this.model.id + ' Sim number ' + this.model.sim_number + ' Status do sim ' + this.model.status_id,
             duration: 3000,
             position: 'botton'
-          }).present();
+          }).present();*/
         }
       );
     }
@@ -91,11 +91,11 @@ export class SimInsertPage {
                 'response': 'Parabéns: Seu serviço VoWIFI está ativo e pronto para uso'
               });
               this.showActivate = this.model && this.model.status_id === 1;
-              this.toast.create({message: 'Ativado.', duration: 3000, position: 'botton'}).present();
+              // this.toast.create({message: 'Ativado.', duration: 3000, position: 'botton'}).present();
             }
           ).catch(
             () => {
-              this.toast.create({message: 'Erro ao ativar.', duration: 3000, position: 'botton'}).present();
+              // this.toast.create({message: 'Erro ao ativar.', duration: 3000, position: 'botton'}).present();
             }
           );
         }
@@ -125,11 +125,11 @@ export class SimInsertPage {
               'response': 'Seu serviço VoWIFI foi desativado'
             });
             this.showActivate = this.model && this.model.status_id === 1;
-            this.toast.create({message: 'Desativado.', duration: 3000, position: 'botton'}).present();
+            // this.toast.create({message: 'Desativado.', duration: 3000, position: 'botton'}).present();
           }
         ).catch(
           () => {
-            this.toast.create({message: 'Erro ao desativado.', duration: 3000, position: 'botton'}).present();
+            // this.toast.create({message: 'Erro ao desativado.', duration: 3000, position: 'botton'}).present();
           }
         );
       }

@@ -18,13 +18,10 @@ export class SimProvider {
 
   public save(product: SimCard) {
     if (product.id) {
-      this.toast.create({message: 'Update.', duration: 3000, position: 'botton'}).present();
       return this.update(product);
     } else {
-      this.toast.create({message: 'Save.', duration: 3000, position: 'botton'}).present();
       return this.insert(product);
     }
-
   }
 
   private insert(simCard: SimCard) {
@@ -33,8 +30,8 @@ export class SimProvider {
         let sql = 'insert into sim_card (sim_number, status_id) values (?, ?)';
         let data = [simCard.sim_number, simCard.status_id];
 
-        return db.executeSql(sql, data).then(() => this.toast.create({message: 'insert sql.', duration: 3000, position: 'botton'}).present())
-          .catch((e) => this.toast.create({message: 'erro insert sql.', duration: 3000, position: 'botton'}).present());
+        return db.executeSql(sql, data).then(() => console.log('sql OK'))
+          .catch((e) => console.log('Erro sql'));
       })
       .catch((e) => console.error(e));
   }
