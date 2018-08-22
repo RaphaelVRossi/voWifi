@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams, ToastController} from 'ionic-angular';
+import {IonicPage, LoadingController, NavController, NavParams, ToastController} from 'ionic-angular';
 import {SimCard, SimProvider} from "../../providers/sim/sim";
 import {ResponsePage} from "../response/response";
 import {Http} from "@angular/http";
@@ -22,7 +22,7 @@ export class SimInsertPage {
   validPrefixs = ['(21) 98113', '(11) 98523', '(11) 98113'];
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private simProvider: SimProvider,
-              private toast: ToastController, private http: Http) {
+              private toast: ToastController, private http: Http, private loadingCtrl: LoadingController) {
   }
 
   ionViewDidLoad() {
@@ -80,8 +80,15 @@ export class SimInsertPage {
         ]
       };
 
+      let loading = this.loadingCtrl.create({
+        content: 'Carregando...',
+        spinner: 'dots'
+      });
+
+      loading.present();
       await this.http.post('http://135.109.210.53:5000/api/v1/activation/service', data).toPromise().then(
         (response) => {
+          loading.dismiss();
           console.log(response);
           this.model.status_id = 2;
 
@@ -100,10 +107,13 @@ export class SimInsertPage {
           );
         }
       ).catch(
-        (response) => this.navCtrl.push(ResponsePage, {
-          'response': 'Erro ao acessar os dados',
-          'error': true
-        })
+        (response) => {
+          loading.dismiss();
+          this.navCtrl.push(ResponsePage, {
+            'response': 'Erro ao acessar os dados',
+            'error': true
+          })
+        }
       );
     } else {
       this.navCtrl.push(ResponsePage, {
@@ -114,9 +124,16 @@ export class SimInsertPage {
   }
 
   async deactivateSim() {
+    let loading = this.loadingCtrl.create({
+      content: 'Carregando...',
+      spinner: 'dots'
+
+    });
+    loading.present();
     // await this.http.delete('http://135.109.210.53:5000/api/v1/activation/service/vowifi-', {params: {'MSISDN': SimInsertPage.clearSimNumber(this.model.sim_number)}}).toPromise().then(
     await this.http.delete('http://135.109.210.53:5000/api/v1/activation/service/vowifi-' + SimInsertPage.clearSimNumber(this.model.sim_number)).toPromise().then(
       (response) => {
+        loading.dismiss();
         this.model.status_id = 1;
 
         this.simProvider.save(this.model).then(
@@ -134,10 +151,13 @@ export class SimInsertPage {
         );
       }
     ).catch(
-      (response) => this.navCtrl.push(ResponsePage, {
-        'response': 'Erro ao acessar os dados',
-        'error': true
-      })
+      (response) => {
+        loading.dismiss();
+        this.navCtrl.push(ResponsePage, {
+          'response': 'Erro ao acessar os dados',
+          'error': true
+        })
+      }
     );
   }
 
