@@ -14,7 +14,7 @@
   <button ion-button round outline class="tim-button" (click)="moveToSimPage()">Participar</button>
 
 
-  <!--<button ion-button class="tim-button" (click)="getSimData()">Populate SIM Info</button>
+  <button ion-button class="tim-button" (click)="getSimData()">Populate SIM Info</button>
 
   <ion-list *ngIf="simInfo">
     <ion-item><b>Country Code</b> {{ simInfo.countryCode }}</ion-item>
@@ -33,9 +33,10 @@
         <ion-item><b>isDataRoaming</b> {{ card.isDataRoaming }}</ion-item>
         <ion-item><b>phoneNumber</b> {{ card.phoneNumber }}</ion-item>
         <ion-item><b>simSerialNumber</b> {{ card.simSerialNumber }}</ion-item>
+        <ion-item><b>Network Status</b> {{ statusNetwork }}</ion-item>
       </ion-list>
     </ion-card-content>
-  </ion-card>-->
+  </ion-card>
 </ion-content>
 
 <ion-footer>

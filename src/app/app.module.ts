@@ -14,6 +14,7 @@ import {DatabaseProvider} from '../providers/database/database';
 import {SimProvider} from '../providers/sim/sim';
 import {ResponsePage} from "../pages/response/response";
 import {HttpModule} from "@angular/http";
+import {Network} from "@ionic-native/network";
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import {HttpModule} from "@angular/http";
     DatabaseProvider,
     SimProvider,
     HttpModule,
+    Network
   ]
 })
 export class AppModule {
