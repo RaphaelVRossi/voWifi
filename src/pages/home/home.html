@@ -1,8 +1,14 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      <img src="../../assets/imgs/tim-logo.png"/>
+      <img src="../assets/imgs/tim-logo.png">
     </ion-title>
+
+    <ion-buttons end style="padding-right: 30px; padding-bottom: 5px;">
+      <button ion-button icon-only (click)="openModal()">
+        <ion-icon name="options"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
@@ -13,30 +19,31 @@
   <br>
   <button ion-button round outline class="tim-button" (click)="moveToSimPage()">Participar</button>
 
+  <!--<button ion-button class="tim-button" (click)="getSimData()">Populate SIM Info</button>-->
 
-  <button ion-button class="tim-button" (click)="getSimData()">Populate SIM Info</button>
+  <!--<p>{{teste}}</p>-->
 
-  <ion-list *ngIf="simInfo">
-    <ion-item><b>Country Code</b> {{ simInfo.countryCode }}</ion-item>
-    <ion-item><b>Phone Number</b> {{ simInfo.phoneNumber }}</ion-item>
-    <ion-item><b>Device Id</b> {{ simInfo.deviceId }}</ion-item>
-  </ion-list>
-  <ion-card *ngFor="let card of cards">
-    <ion-card-header>
-      {{card.carrierName}}
-    </ion-card-header>
-    <ion-card-content>
-      <ion-list>
-        <ion-item><b>simSlotIndex</b> {{ card.simSlotIndex }}</ion-item>
-        <ion-item><b>displayName</b> {{ card.displayName }}</ion-item>
-        <ion-item><b>isNetworkRoaming</b> {{ card.isNetworkRoaming }}</ion-item>
-        <ion-item><b>isDataRoaming</b> {{ card.isDataRoaming }}</ion-item>
-        <ion-item><b>phoneNumber</b> {{ card.phoneNumber }}</ion-item>
-        <ion-item><b>simSerialNumber</b> {{ card.simSerialNumber }}</ion-item>
-        <ion-item><b>Network Status</b> {{ statusNetwork }}</ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
+  <!--<ion-list *ngIf="simInfo">-->
+  <!--<ion-item><b>Country Code</b> {{ simInfo.countryCode }}</ion-item>-->
+  <!--<ion-item><b>Phone Number</b> {{ simInfo.phoneNumber }}</ion-item>-->
+  <!--<ion-item><b>Device Id</b> {{ simInfo.deviceId }}</ion-item>-->
+  <!--</ion-list>-->
+  <!--<ion-card *ngFor="let card of cards">-->
+  <!--<ion-card-header>-->
+  <!--{{card.carrierName}}-->
+  <!--</ion-card-header>-->
+  <!--<ion-card-content>-->
+  <!--<ion-list>-->
+  <!--<ion-item><b>simSlotIndex</b> {{ card.simSlotIndex }}</ion-item>-->
+  <!--<ion-item><b>displayName</b> {{ card.displayName }}</ion-item>-->
+  <!--<ion-item><b>isNetworkRoaming</b> {{ card.isNetworkRoaming }}</ion-item>-->
+  <!--<ion-item><b>isDataRoaming</b> {{ card.isDataRoaming }}</ion-item>-->
+  <!--<ion-item><b>phoneNumber</b> {{ card.phoneNumber }}</ion-item>-->
+  <!--<ion-item><b>simSerialNumber</b> {{ card.simSerialNumber }}</ion-item>-->
+  <!--<ion-item><b>Network Status</b> {{ statusNetwork }}</ion-item>-->
+  <!--</ion-list>-->
+  <!--</ion-card-content>-->
+  <!--</ion-card>-->
 </ion-content>
 
 <ion-footer>

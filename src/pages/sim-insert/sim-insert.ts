@@ -3,6 +3,7 @@ import {IonicPage, LoadingController, NavController, NavParams, ToastController}
 import {SimCard, SimProvider} from "../../providers/sim/sim";
 import {ResponsePage} from "../response/response";
 import {Http} from "@angular/http";
+import {Params, ParamsProvider} from "../../providers/sim/params";
 
 /**
  * Generated class for the SimInsertPage page.
@@ -18,11 +19,25 @@ import {Http} from "@angular/http";
 })
 export class SimInsertPage {
   model: SimCard;
-  showActivate: boolean;
+  showActivate: boolean = true;
   validPrefixs = ['(21) 98113', '(11) 98523', '(11) 98113'];
 
+  simInfo: any;
+
+  params: Params;
+
   constructor(public navCtrl: NavController, public navParams: NavParams, private simProvider: SimProvider,
-              private toast: ToastController, private http: Http, private loadingCtrl: LoadingController) {
+              private toast: ToastController, private http: Http, private loadingCtrl: LoadingController,
+              private paramsProvider: ParamsProvider) {
+    this.simInfo = this.navParams.get('simInfo');
+    this.model = new SimCard();
+    if (this.simInfo)
+      this.model.sim_subscriber_id = this.simInfo.simSubscriberId;
+
+    this.paramsProvider.getByKey('url').then(value => {
+      if (value)
+        this.params = value;
+    })
   }
 
   ionViewDidLoad() {
@@ -61,66 +76,66 @@ export class SimInsertPage {
   }
 
   async activateSim() {
-    let isValid: boolean;
-    for (let prefix in this.validPrefixs) {
-      isValid = this.model.sim_number.startsWith(this.validPrefixs[prefix]);
-      if (isValid)
-        break;
-    }
+    // let isValid: boolean = true;
+    // for (let prefix in this.validPrefixs) {
+    //   isValid = this.model.sim_number.startsWith(this.validPrefixs[prefix]);
+    //   if (isValid)
+    //     break;
+    // }
 
-    if (isValid) {
-      let data = {
-        serviceSpecification: {
-          id: "vowifi"
-        },
-        serviceCharacteristic: [
-          {
-            name: "msisdn", value: SimInsertPage.clearSimNumber(this.model.sim_number)
+    // if (isValid) {
+    let data = {
+      serviceSpecification: {
+        id: "vowifi"
+      },
+      serviceCharacteristic: [
+        {
+          // name: "msisdn", value: SimInsertPage.clearSimNumber(this.model.sim_subscriber_id)
+          name: "msisdn", value: this.model.sim_subscriber_id
+        }
+      ]
+    };
+
+    let loading = this.loadingCtrl.create({
+      content: 'Carregando...',
+      spinner: 'dots'
+    });
+
+    loading.present();
+    await this.http.post('http://' + this.params.value_param + '/api/v1/activation/service', data).toPromise().then(
+      (response) => {
+        loading.dismiss();
+        console.log(response);
+        this.model.status_id = 2;
+
+        this.simProvider.save(this.model).then(
+          () => {
+            this.navCtrl.push(ResponsePage, {
+              'response': 'Parabéns: Seu serviço VoWIFI está ativo e pronto para uso'
+            });
+            this.showActivate = this.model && this.model.status_id === 1;
+            // this.toast.create({message: 'Ativado.', duration: 3000, position: 'botton'}).present();
           }
-        ]
-      };
-
-      let loading = this.loadingCtrl.create({
-        content: 'Carregando...',
-        spinner: 'dots'
-      });
-
-      loading.present();
-      await this.http.post('http://135.109.210.53:5000/api/v1/activation/service', data).toPromise().then(
-        (response) => {
-          loading.dismiss();
-          console.log(response);
-          this.model.status_id = 2;
-
-          this.simProvider.save(this.model).then(
-            () => {
-              this.navCtrl.push(ResponsePage, {
-                'response': 'Parabéns: Seu serviço VoWIFI está ativo e pronto para uso'
-              });
-              this.showActivate = this.model && this.model.status_id === 1;
-              // this.toast.create({message: 'Ativado.', duration: 3000, position: 'botton'}).present();
-            }
-          ).catch(
-            () => {
-              // this.toast.create({message: 'Erro ao ativar.', duration: 3000, position: 'botton'}).present();
-            }
-          );
-        }
-      ).catch(
-        (response) => {
-          loading.dismiss();
-          this.navCtrl.push(ResponsePage, {
-            'response': 'Erro ao acessar os dados',
-            'error': true
-          })
-        }
-      );
-    } else {
-      this.navCtrl.push(ResponsePage, {
-        'response': 'Serviço disponível somente para colaboradores da TIM',
-        'error': true
-      });
-    }
+        ).catch(
+          () => {
+            // this.toast.create({message: 'Erro ao ativar.', duration: 3000, position: 'botton'}).present();
+          }
+        );
+      }
+    ).catch(
+      () => {
+        loading.dismiss();
+        this.navCtrl.push(ResponsePage, {
+          'response': 'Erro ao acessar os dados',
+          'error': true
+        })
+      }
+    );
+    // } else {
+    //   this.navCtrl.push(ResponsePage, {
+    //     'response': 'Serviço disponível somente para colaboradores da TIM',
+    //     'error': true
+    //   });
   }
 
   async deactivateSim() {
@@ -131,8 +146,9 @@ export class SimInsertPage {
     });
     loading.present();
     // await this.http.delete('http://135.109.210.53:5000/api/v1/activation/service/vowifi-', {params: {'MSISDN': SimInsertPage.clearSimNumber(this.model.sim_number)}}).toPromise().then(
-    await this.http.delete('http://135.109.210.53:5000/api/v1/activation/service/vowifi-' + SimInsertPage.clearSimNumber(this.model.sim_number)).toPromise().then(
-      (response) => {
+    // await this.http.delete('http://135.109.210.53:5000/api/v1/activation/service/vowifi-' + SimInsertPage.clearSimNumber(this.model.sim_number)).toPromise().then(
+    await this.http.delete('http://' + this.params.value_param + '/api/v1/activation/service/vowifi-' + this.model.sim_number).toPromise().then(
+      () => {
         loading.dismiss();
         this.model.status_id = 1;
 
@@ -151,7 +167,7 @@ export class SimInsertPage {
         );
       }
     ).catch(
-      (response) => {
+      () => {
         loading.dismiss();
         this.navCtrl.push(ResponsePage, {
           'response': 'Erro ao acessar os dados',

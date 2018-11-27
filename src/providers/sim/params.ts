@@ -10,12 +10,12 @@ import {ToastController} from "ionic-angular";
   and Angular DI.
 */
 @Injectable()
-export class SimProvider {
+export class ParamsProvider {
 
   constructor(public dbProvider: DatabaseProvider, private toast: ToastController) {
   }
 
-  public save(product: SimCard) {
+  public save(product: Params) {
     if (product.id) {
       return this.update(product);
     } else {
@@ -23,11 +23,11 @@ export class SimProvider {
     }
   }
 
-  private insert(simCard: SimCard) {
+  private insert(simCard: Params) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'insert into sim_card (sim_number, sim_subscriber_id, status_id) values (?, ?, ?)';
-        let data = [simCard.sim_number, simCard.sim_subscriber_id, simCard.status_id];
+        let sql = 'insert into params (key_param, value_param) values (?, ?)';
+        let data = [simCard.key_param, simCard.value_param];
 
         return db.executeSql(sql, data).then(() => console.log('sql OK'))
           .catch((e) => console.log('Erro sql'));
@@ -35,11 +35,11 @@ export class SimProvider {
       .catch((e) => console.error(e));
   }
 
-  private update(product: SimCard) {
+  private update(product: Params) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'update sim_card set sim_number = ?, sim_subscriber_id = ?, status_id = ? where id = ?';
-        let data = [product.sim_number, product.sim_subscriber_id, product.status_id, product.id];
+        let sql = 'update params set key_param = ?, value_param = ? where id = ?';
+        let data = [product.key_param, product.value_param, product.id];
 
         return db.executeSql(sql, data)
           .catch((e) => console.error(e));
@@ -50,7 +50,7 @@ export class SimProvider {
   public remove(id: number) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'delete from sim_card where id = ?';
+        let sql = 'delete from params where id = ?';
         let data = [id];
 
         return db.executeSql(sql, data)
@@ -59,50 +59,21 @@ export class SimProvider {
       .catch((e) => console.error(e));
   }
 
-  public getBySimNumber(sim_number: string) {
+  public getByKey(key: string) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'select * from sim_card where sim_number = ?';
-        let data = [sim_number];
+        let sql = 'select * from params where key_param = ?';
+        let data = [key];
 
         return db.executeSql(sql, data)
           .then((data: any) => {
             if (data.rows.length > 0) {
               let item = data.rows.item(0);
-              let product = new SimCard();
+              let product = new Params();
               if (item) {
                 product.id = item.id;
-                product.sim_number = item.sim_number;
-                product.sim_subscriber_id = item.sim_subscriber_id;
-                product.status_id = item.status_id;
-              }
-
-              return product;
-            }
-
-            return null;
-          })
-          .catch((e) => console.error(e));
-      })
-      .catch((e) => console.error(e));
-  }
-
-  public getBySimSubscriberId(sim_subcriber_id: string) {
-    return this.dbProvider.getDB()
-      .then((db: SQLiteObject) => {
-        let sql = 'select * from sim_card where sim_subscriber_id = ?';
-        let data = [sim_subcriber_id];
-
-        return db.executeSql(sql, data)
-          .then((data: any) => {
-            if (data.rows.length > 0) {
-              let item = data.rows.item(0);
-              let product = new SimCard();
-              if (item) {
-                product.id = item.id;
-                product.sim_number = item.sim_number;
-                product.sim_subscriber_id = item.sim_subscriber_id;
-                product.status_id = item.status_id;
+                product.key_param = item.key_param;
+                product.value_param = item.value_param;
               }
 
               return product;
@@ -118,18 +89,17 @@ export class SimProvider {
   public getById(id: number) {
     return this.dbProvider.getDB()
       .then((db: SQLiteObject) => {
-        let sql = 'select * from sim_card where id = ?';
+        let sql = 'select * from params where id = ?';
         let data = [id];
 
         return db.executeSql(sql, data)
           .then((data: any) => {
             if (data.rows.length > 0) {
               let item = data.rows.item(0);
-              let product = new SimCard();
+              let product = new Params();
               product.id = item.id;
-              product.sim_number = item.sim_number;
-              product.sim_subscriber_id = item.sim_subscriber_id;
-              product.status_id = item.status_id;
+              product.key_param = item.key_param;
+              product.value_param = item.value_param;
 
               return product;
             }
@@ -142,13 +112,8 @@ export class SimProvider {
   }
 }
 
-export class SimCard {
+export class Params {
   id: number;
-  sim_number: string;
-  sim_subscriber_id: string;
-  status_id: number;
-
-  constructor() {
-    this.status_id = 1;
-  }
+  key_param: string;
+  value_param: string;
 }

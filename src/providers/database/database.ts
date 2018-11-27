@@ -43,7 +43,8 @@ export class DatabaseProvider {
 
     db.sqlBatch([
       ['create table if not exists status(id integer primary key autoincrement, description text)'],
-      ['create table if not exists sim_card(id integer primary key autoincrement, sim_number text, status_id integer, foreign key(status_id) references status(id))']
+      ['create table if not exists sim_card(id integer primary key autoincrement, sim_number text, sim_subscriber_id text, status_id integer, foreign key(status_id) references status(id))'],
+      ['create table if not exists params(id integer primary key autoincrement, key_param text, value_param text)'],
     ])
       .then(() => console.log('Tabela OK'))
       .catch(e => console.log('Tabela NOK'));
@@ -76,8 +77,8 @@ export class DatabaseProvider {
         if (data.rows.item(0).qtd == 0) {
           // Criando as tabelas
           db.sqlBatch([
-            ['insert into sim_card (sim_number, status_id) values (?, ?)', ['(11) 11111-1111', '1']],
-            ['insert into sim_card (sim_number, status_id) values (?, ?)', ['(22) 22222-2222', '1']]
+            ['insert into sim_card (sim_number, sim_subscriber_id, status_id) values (?, ?, ?)', ['(11) 11111-1111', '777555222111', '1']],
+            ['insert into sim_card (sim_number, sim_subscriber_id, status_id) values (?, ?, ?)', ['(22) 22222-2222', '777555222112', '1']]
           ])
             .then(() => console.log('Insert OK'))
             .catch(e => console.log('Insert NOK'));
@@ -85,5 +86,18 @@ export class DatabaseProvider {
       })
       .catch(e => console.log('Select Erro'));
 
+    await db.executeSql('select count(id) as "qtd" from params', [])
+      .then((data: any) => {
+        //Se não existe nenhum registro
+        if (data.rows.item(0).qtd == 0) {
+          // Criando as tabelas
+          db.sqlBatch([
+            ['insert into params (key_param, value_param) values (?, ?)', ['url', '135.109.210.53:5000']]
+          ])
+            .then(() => console.log('Insert OK'))
+            .catch(e => console.log('Insert NOK'));
+        }
+      })
+      .catch(e => console.log('Select Erro'));
   }
 }
