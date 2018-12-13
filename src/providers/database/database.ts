@@ -86,7 +86,7 @@ export class DatabaseProvider {
         if (data.rows.item(0).qtd == 0) {
           // Criando as tabelas
           db.sqlBatch([
-            ['insert into params (key_param, value_param) values (?, ?)', ['url', '135.109.210.53:5000']]
+            ['insert into params (key_param, value_param) values (?, ?)', ['url', 'http://10.221.35.2:44:44006/ilws/InstantLinkSOA']]
           ])
             .then(() => console.log('Insert OK'))
             .catch(e => console.log(JSON.stringify(e)));
