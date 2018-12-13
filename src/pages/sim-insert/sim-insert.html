@@ -18,12 +18,25 @@
         <!--(ionChange)="simValueChange($event)"></ion-input>-->
         <!--</ion-item>-->
 
-        <button ion-button round color="secondary" *ngIf="showActivate != null && showActivate" (click)="activateSim()">
+        <!--<button ion-button round color="secondary" *ngIf="showActivate != null && showActivate" (click)="activateSim()">-->
+        <!--Ativar-->
+        <!--</button>-->
+        <!--<button ion-button round color="danger" *ngIf="showActivate != null && !showActivate" (click)="deactivateSim()">-->
+        <!--Desativar-->
+        <!--</button>-->
+        <button ion-button round color="secondary" *ngIf="showActivate != null && showActivate"
+                (click)="activateSimSoap()">
           Ativar
         </button>
-        <button ion-button round color="danger" *ngIf="showActivate != null && !showActivate" (click)="deactivateSim()">
+        <button ion-button round color="danger" *ngIf="showActivate != null && !showActivate"
+                (click)="deactivateSimSoap()">
           Desativar
         </button>
+
+        <!--<div>STATUS {{status}}</div>-->
+        <!--<div>MESSAGE {{message}}</div>-->
+
+        <!--<div>{{response}}</div>-->
       </ion-list>
     </ion-card-content>
   </ion-card>

@@ -71,7 +71,7 @@ export class Mask {
       }
       e.target.value = applied;
 
-      console.log(this.model, applied)
+      console.log(this.model, applied);
 
       if (this.model && this.model.valueAccessor)
         this.model.valueAccessor.writeValue(applied);

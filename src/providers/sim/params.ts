@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {DatabaseProvider} from "../database/database";
 import {SQLiteObject} from "@ionic-native/sqlite";
-import {ToastController} from "ionic-angular";
+import {consoleLogSqlError, consoleLogSqlSuccess, generateError} from "../../utils/StringUtils";
 
 /*
   Generated class for the SimProvider provider.
@@ -12,15 +12,14 @@ import {ToastController} from "ionic-angular";
 @Injectable()
 export class ParamsProvider {
 
-  constructor(public dbProvider: DatabaseProvider, private toast: ToastController) {
+  constructor(public dbProvider: DatabaseProvider) {
   }
 
-  public save(product: Params) {
-    if (product.id) {
-      return this.update(product);
-    } else {
-      return this.insert(product);
-    }
+  public save(params: Params) {
+    if (params.id)
+      return this.update(params);
+    else
+      return this.insert(params);
   }
 
   private insert(simCard: Params) {
@@ -29,10 +28,10 @@ export class ParamsProvider {
         let sql = 'insert into params (key_param, value_param) values (?, ?)';
         let data = [simCard.key_param, simCard.value_param];
 
-        return db.executeSql(sql, data).then(() => console.log('sql OK'))
-          .catch((e) => console.log('Erro sql'));
+        return db.executeSql(sql, data).then(() => consoleLogSqlSuccess(sql, data))
+          .catch((e) => consoleLogSqlError(sql, data, e));
       })
-      .catch((e) => console.error(e));
+      .catch((e) => console.log(generateError(e)));
   }
 
   private update(product: Params) {
@@ -41,10 +40,10 @@ export class ParamsProvider {
         let sql = 'update params set key_param = ?, value_param = ? where id = ?';
         let data = [product.key_param, product.value_param, product.id];
 
-        return db.executeSql(sql, data)
-          .catch((e) => console.error(e));
+        return db.executeSql(sql, data).then(() => consoleLogSqlSuccess(sql, data))
+          .catch((e) => consoleLogSqlError(sql, data, e));
       })
-      .catch((e) => console.error(e));
+      .catch((e) => console.log(generateError(e)));
   }
 
   public remove(id: number) {
@@ -53,10 +52,10 @@ export class ParamsProvider {
         let sql = 'delete from params where id = ?';
         let data = [id];
 
-        return db.executeSql(sql, data)
-          .catch((e) => console.error(e));
+        return db.executeSql(sql, data).then(() => consoleLogSqlSuccess(sql, data))
+          .catch((e) => consoleLogSqlError(sql, data, e));
       })
-      .catch((e) => console.error(e));
+      .catch((e) => console.log(generateError(e)));
   }
 
   public getByKey(key: string) {
@@ -69,21 +68,14 @@ export class ParamsProvider {
           .then((data: any) => {
             if (data.rows.length > 0) {
               let item = data.rows.item(0);
-              let product = new Params();
-              if (item) {
-                product.id = item.id;
-                product.key_param = item.key_param;
-                product.value_param = item.value_param;
-              }
-
-              return product;
+              return new Params(item);
             }
 
             return null;
           })
-          .catch((e) => console.error(e));
+          .catch((e) => consoleLogSqlError(sql, data, e));
       })
-      .catch((e) => console.error(e));
+      .catch((e) => console.log(generateError(e)));
   }
 
   public getById(id: number) {
@@ -96,19 +88,14 @@ export class ParamsProvider {
           .then((data: any) => {
             if (data.rows.length > 0) {
               let item = data.rows.item(0);
-              let product = new Params();
-              product.id = item.id;
-              product.key_param = item.key_param;
-              product.value_param = item.value_param;
-
-              return product;
+              return new Params(item);
             }
 
             return null;
           })
-          .catch((e) => console.error(e));
+          .catch((e) => consoleLogSqlError(sql, data, e));
       })
-      .catch((e) => console.error(e));
+      .catch((e) => console.log(generateError(e)));
   }
 }
 
@@ -116,4 +103,12 @@ export class Params {
   id: number;
   key_param: string;
   value_param: string;
+
+  constructor(item: any) {
+    if (item) {
+      this.id = item.id;
+      this.key_param = item.key_param;
+      this.value_param = item.value_param;
+    }
+  }
 }

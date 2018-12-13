@@ -23,27 +23,35 @@ export class HomePage {
               private modalCtrl: ModalController) {
   }
 
-  ionViewDidLoad() {
-  }
-
   async moveToSimPage() {
     let loading = this.loadingCtrl.create({
       content: 'Carregando...',
       spinner: 'dots'
     });
-    loading.present();
+    loading.present().catch((err) => console.log(err));
     this.sim.requestReadPermission().then(
       () => console.log('Permission granted'),
     ).catch(() => console.log('Permission denied'));
-    this.getSimData().then(() => loading.dismiss()).catch(err => {
+    await this.getSimData().then(() => loading.dismiss()).catch(err => {
       console.log(JSON.stringify(err));
-      loading.dismiss();
+      loading.dismiss().catch((err) => console.log(err));
     });
+
+    console.log('TESTE ' + JSON.stringify(this.simInfo));
 
     this.navCtrl.push(SimInsertPage, {
       'simInfo': JSON.stringify(this.simInfo)
     }).then(() => loading.dismiss())
       .catch(err => console.log(JSON.stringify(err)));
+
+    // if (this.simInfo) {
+    //
+    // } else {
+    //   this.navCtrl.push(ResponsePage, {
+    //     'response': 'Erro ao ler dados do SIM',
+    //     'error': true
+    //   })
+    // }
   }
 
   async getSimData() {
@@ -54,7 +62,7 @@ export class HomePage {
         this.simInfo = simData;
         this.teste = JSON.stringify(this.simInfo);
         this.cards = simData.cards;
-        console.log(simData);
+        console.log(this.teste);
       }
       this.statusNetwork = this.network.type;
     } catch (error) {
@@ -77,7 +85,7 @@ export class HomePage {
 
   openModal() {
     let profileModal = this.modalCtrl.create(Options, {userId: 8675309});
-    profileModal.present();
+    profileModal.present().catch((err) => console.log(err));
 
   }
 }
@@ -90,7 +98,7 @@ export class HomePage {
         <ion-card-header>
           <h2>Configurações</h2>
         </ion-card-header>
-        
+
         <ion-card-content>
           <ion-list>
             <ion-item>
@@ -132,17 +140,17 @@ export class Options {
   }
 
   cancel() {
-    this.viewController.dismiss();
+    this.viewController.dismiss().catch((err) => console.log(err));
   }
 
   save() {
     if (!this.params) {
-      this.params = new Params();
+      this.params = new Params(null);
       this.params.key_param = 'url';
     }
 
     this.params.value_param = this.url;
-    this.paramsProvider.save(this.params);
+    this.paramsProvider.save(this.params).catch((err) => console.log(err));
     this.cancel();
   }
 }
